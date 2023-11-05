@@ -16,7 +16,7 @@ app.use(cors({
     credentials : true
 }));
 
-app.use(cookieParser())
+app.use(cookieParser()) //using cookieParser we are extracting token form the cookie(see authMiddleware.js)
 app.use(morgan('dev'))
 
 app.use('/ping', function(req,res){
