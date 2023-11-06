@@ -1,5 +1,8 @@
+import { json } from "express";
 import User from "../models/userModel.js";
 import AppErr from "../utils/errorUtils.js";
+import cloudinary from 'cloudinary'
+import fs from 'fs/promises'
 
 const cookieOptions = {
     maxAge : 24*7*60*60*1000, // 7 day
@@ -32,7 +35,7 @@ const register = async (req, res, next) => {
     fullName,
     email,
     password,
-    avtar: {
+    avatar: {
       public_id: email,
       secure_url:
         "https://cdn.pixabay.com/photo/2017/02/01/22/02/mountain-landscape-2031539_640.jpg",
@@ -43,7 +46,34 @@ const register = async (req, res, next) => {
     return next(new AppErr("User Registrantion failed, please try agian", 400));
   }
 
-  // TODO : file upload
+  console.log('files details > ',JSON.stringify(req.file))
+
+    if(req.file) {
+      try{
+        const result = await cloudinary.v2.uploader.upload(req.file.path, {
+          folder : 'lms',
+          width : 250,
+          height : 250,
+          gravity : 'faces',
+          crop : 'fill'
+        })
+
+        console.log('Upload Result:', result);
+
+        if(result){
+          console.log('result',result)
+          user.avatar.public_id = result.public_id
+          user.avatar.secure_url = result.secure_url
+
+          // remove file from the server
+          fs.rm(`uploads/${req.file.filename}`)
+        }
+      }catch(error){
+        return(
+          next(new AppErr(error.message, error.stack, error.name || 'file not uploaded, Please try again', 500))
+        )
+      }
+    }
 
   await user.save(); 
   user.password = undefined;

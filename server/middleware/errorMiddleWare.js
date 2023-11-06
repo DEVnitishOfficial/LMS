@@ -1,6 +1,6 @@
 
 const ErrorMiddleWare = (err,req,res,next) => {
-    err.statusCode = err.statusCode || 5000
+    err.statusCode = err.statusCode || 500
     err.message = err.message || "Something Went wrong!!"
 
 

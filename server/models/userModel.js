@@ -29,7 +29,7 @@ const userSchema = new Schema(
       minLength: [8, "password must be at lest eight character"],
       select: false,
     },
-    avtar: {
+    avatar: {
       public_id: {
         type: String,
       },
@@ -76,6 +76,6 @@ userSchema.methods = {
     }
 }
 
-const User = model("LMS_USER", userSchema);
+const User = model("LMS_USER2", userSchema);
 
 export default User;
