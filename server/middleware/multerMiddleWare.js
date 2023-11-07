@@ -1,6 +1,7 @@
 import path from "path";
 
 import multer from "multer";
+// multer convert from binary data to the image(multipart/form-data)
 
 const upload = multer({
   dest: "uploads/",
