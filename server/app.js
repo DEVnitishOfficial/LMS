@@ -1,5 +1,5 @@
 
-import express from 'express';
+import express, { urlencoded } from 'express';
 import cors from 'cors';
 import cookieParser  from 'cookie-parser';
 import { config } from 'dotenv';
@@ -11,6 +11,7 @@ config()
 const app = express()
 
 app.use(express.json())
+app.use(express.urlencoded({extended : true}))
 app.use(cors({
     origin : [process.env.FRONTEND_URL],
     credentials : true
