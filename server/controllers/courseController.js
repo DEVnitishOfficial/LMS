@@ -1,5 +1,8 @@
+import { error } from "console";
 import Course from "../models/courseModel.js";
 import AppErr from "../utils/errorUtils.js";
+import cloudinary from "cloudinary";
+import fs from "fs/promises";
 
 const getAllCourses = async (req, res, next) => {
   const courses = await Course.find({}).select("-lectures");
@@ -20,17 +23,75 @@ const getLectureByCourseId = async (req, res, next) => {
     const { id } = req.params;
     const course = await Course.findById(id);
 
-    if(!course){
-      return next (new AppErr('Invalid course id',400))
+    if (!course) {
+      return next(new AppErr("Invalid course id", 400));
     }
     res.status(200).json({
-        success : true,
-        message : "course lecture fetched successfully",
-        lectures : course.lectures
-    })
+      success: true,
+      message: "course lecture fetched successfully",
+      lectures: course.lectures,
+    });
   } catch (error) {
     return next(new AppErr("error.message", 500));
   }
 };
+const createCourse = async (req, res, next) => {
+  const { title, description, category, createdBy } = req.body;
 
-export { getAllCourses, getLectureByCourseId };
+  if (!title || !description || !category || !createdBy) {
+    return next(new AppErr("All fields are mandatory to create a course", 400));
+  }
+
+  const course = await Course.create({
+    title,
+    description,
+    category,
+    createdBy,
+    thumbnail : {
+      public_id : 'dummy',
+      secure_url : 'dummy'
+    }
+  });
+
+  if (!course) {
+    return next(new AppErr("Course not created,please try again", 500));
+  }
+
+  if (req.file) {
+    const result = await cloudinary.v2.uploader.upload(req.file.path, {
+      folder: "lms",
+    });
+
+    if (result) {
+      course.thumbnail.public_id = result.public_id;
+      course.thumbnail.secure_url = result.secure_url;
+    } else {
+      return next(new AppErr(error.message, 400));
+    }
+
+    fs.rm(`uploads/${req.file.filename}`)
+  }
+    await course.save()
+    res.status(200).json({
+      success : true,
+      message : 'course created successfully',
+      course,
+    })
+};
+const updateCourse = async (req, res, next) => {
+  try {
+    
+  } catch (error) {
+    return next (new AppErr(error.message,400))
+    
+  }
+};
+const deleteCourse = async (req, res, next) => {};
+
+export {
+  getAllCourses,
+  getLectureByCourseId,
+  createCourse,
+  updateCourse,
+  deleteCourse,
+};

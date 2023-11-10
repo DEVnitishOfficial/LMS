@@ -28,7 +28,7 @@ app.use('/ping', function(req,res){
 // routes of 3 module
 
 app.use('/api/v1/user',userRoutes)
-app.use('api/v1/courses',courseRouter)
+app.use('/api/v1/courses',courseRouter)
 
 app.use('*', (req,res) => {
     res.status(404).send('OPPS!! 404 page not found')
