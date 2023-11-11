@@ -22,3 +22,8 @@ RAZORPAY_PLAN_ID =
 
 FRONTEND_URL = 
 CONTACT_US_EMAIL = 
+
+** updated but not commit on git
+→ update course
+→ delete course
+→ added authorization

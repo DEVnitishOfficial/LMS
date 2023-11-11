@@ -11,6 +11,16 @@ const isLoggedIn = async (req,res,next) => {
     req.user = userDetails;
     next()
 }
+
+const authorizedRoles = (...roles) =>  async(req,res,next) => { // creating clouser
+    const currentUserRoles = req.user.role
+    if(!roles.includes(currentUserRoles)){
+        return next (new AppErr('You are not authorized to make this change',403))
+    }
+    next()
+
+}
     export {
-        isLoggedIn
+        isLoggedIn,
+        authorizedRoles
     }
