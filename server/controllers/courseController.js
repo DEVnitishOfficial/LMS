@@ -105,21 +105,19 @@ const addLectureToCourseById = async (req, res, next) => {
         const result = await cloudinary.v2.uploader.upload(req.file.path, {
           folder: "lms",
         });
-    
+  
         if (result) {
           lectureData.lecture.public_id = result.public_id;
           lectureData.lecture.secure_url = result.secure_url;
-          fs.rm(`uploads/${req.file.filename}`);
         } else {
-          console.error("Cloudinary upload failed:", result);
-          return next(new AppErr("Cloudinary upload failed", 400));
+          return next(new AppErr(error.message, 400));
         }
+  
+        fs.rm(`uploads/${req.file.filename}`);
       } catch (error) {
-        console.error("Error during Cloudinary upload:", error.message);
-        return next(new AppErr(error.message, 400));
+        return next(new AppErr(error.message,400))
       }
     }
-    
     course.lectures.push(lectureData);
     course.numbersOfLecture = course.lectures.length;
     await course.save();
