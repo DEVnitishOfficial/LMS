@@ -47,10 +47,10 @@ const createCourse = async (req, res, next) => {
     description,
     category,
     createdBy,
-    thumbnail : {
-      public_id : 'dummy',
-      secure_url : 'dummy'
-    }
+    thumbnail: {
+      public_id: "dummy",
+      secure_url: "dummy",
+    },
   });
 
   if (!course) {
@@ -69,51 +69,106 @@ const createCourse = async (req, res, next) => {
       return next(new AppErr(error.message, 400));
     }
 
-    fs.rm(`uploads/${req.file.filename}`)
+    fs.rm(`uploads/${req.file.filename}`);
   }
-    await course.save()
+  await course.save();
+  res.status(200).json({
+    success: true,
+    message: "course created successfully",
+    course,
+  });
+};
+
+const addLectureToCourseById = async (req, res, next) => {
+    const { title, description } = req.body;
+    const { id } = req.params;
+    if (!title || !description) {
+      return next(new AppErr("please provide title and descriptioon", 400));
+    }
+
+    const course = await Course.findById(id);
+    if (!course) {
+      return next(new AppErr("course not found with the given id", 500));
+    }
+
+    const lectureData = {
+      title,
+      description,
+      lecture: {
+        public_id: "dummy",
+        secure_url: "dummy",
+      },
+    };
+
+    if (req.file) {
+      try {
+        const result = await cloudinary.v2.uploader.upload(req.file.path, {
+          folder: "lms",
+        });
+    
+        if (result) {
+          lectureData.lecture.public_id = result.public_id;
+          lectureData.lecture.secure_url = result.secure_url;
+          fs.rm(`uploads/${req.file.filename}`);
+        } else {
+          console.error("Cloudinary upload failed:", result);
+          return next(new AppErr("Cloudinary upload failed", 400));
+        }
+      } catch (error) {
+        console.error("Error during Cloudinary upload:", error.message);
+        return next(new AppErr(error.message, 400));
+      }
+    }
+    
+    course.lectures.push(lectureData);
+    course.numbersOfLecture = course.lectures.length;
+    await course.save();
     res.status(200).json({
-      success : true,
-      message : 'course created successfully',
+      success: true,
+      message: "lectures added successfully to the course",
       course,
     })
-};
+  }
+
 const updateCourse = async (req, res, next) => {
   try {
-    const {id} = req.params
-     const course = await Course.findByIdAndUpdate(id,
+    const { id } = req.params;
+    const course = await Course.findByIdAndUpdate(
+      id,
       {
-        $set : req.body
-      },{
-        runValidators : true
-      });
-      if(!course){
-        return next(new AppErr('course with given id does not exist',500))
+        $set: req.body,
+      },
+      {
+        runValidators: true,
       }
-      res.status(200).json({
-        success : true,
-        message : 'course updated successfully',
-        course
-      })
+    );
+    if (!course) {
+      return next(new AppErr("course with given id does not exist", 500));
+    }
+    res.status(200).json({
+      success: true,
+      message: "course updated successfully",
+      course,
+    });
   } catch (error) {
-    return next (new AppErr(error.message,400))  
+    return next(new AppErr(error.message, 400));
   }
 };
 const deleteCourse = async (req, res, next) => {
   try {
-    const {id} = req.params
-    const course = await Course.findById(id) 
-    if(!course){
-      return next(new AppErr('Course not found with the given id',500))
+    const { id } = req.params;
+    const course = await Course.findById(id);
+    if (!course) {
+      return next(new AppErr("Course not found with the given id", 500));
     }
-    await course.deleteOne()
-    // you can also use findByIdAndDelete(id) 
+    await course.deleteOne();
+    // you can also use findByIdAndDelete(id)
     res.status(200).json({
-      success : true,
-      message : "Course deleted successfully",
-    })
+      success: true,
+      message: "Course deleted successfully",
+    });
   } catch (error) {
-    return next(new AppErr(error.message,400))
+    return next(new AppErr(error.message, 400));
   }
 };
 
@@ -123,4 +178,5 @@ export {
   createCourse,
   updateCourse,
   deleteCourse,
+  addLectureToCourseById,
 };
