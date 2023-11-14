@@ -1,6 +1,7 @@
 import User from "../models/userModel.js";
 import { razorpay } from "../server.js";
 import AppErr from "../utils/errorUtils.js";
+import crypto from 'crypto'
 
 export const getRazorpayApiKey = async (req, res, next) => {
   try {
@@ -14,9 +15,15 @@ export const getRazorpayApiKey = async (req, res, next) => {
   }
 };
 
+/**
+ * @ACTIVATE_SUBSCRIPTION
+ * @ROUTE @POST {{URL}}/api/v1/payments/subscribe
+ * @ACCESS Private (Logged in user only)
+ */
 export const buySubscription = async (req, res, next) => {
   try {
     const { id } = req.user;
+    console.log('id',id)
     const user = await User.findById(id);
     console.log('user',user)
     if (!user) {
@@ -26,19 +33,21 @@ export const buySubscription = async (req, res, next) => {
       return next(new AppErr("admin can not purchase subscription", 400));
     }
   
-    const subscription = await razorpay.subscriptions.create({
-      plan_id: process.env.RAZORPAY_PLAN_ID,
-      customer_notify: 1,
+    const subscription = razorpay.subscriptions.create({
+      plan_id : process.env.RAZORPAY_PLAN_ID,
+      customer_notify: 1
     });
 
-    if(!subscription){
-        return next(new AppErr('getting error in planId or subscription'))
+    if (!subscription) {
+      console.error('Error creating subscription:', subscription);
+      return next(new AppErr('Error creating subscription. Check planId or subscription details.'));
     }
   
     user.subscription.id = subscription.id;
     user.subscription.status = subscription.status;
+
   
-    await user.save;
+    await user.save();
   
     res.status(200).json({
       success: true,
@@ -62,7 +71,7 @@ export const verifySubscription = async (req, res, next) => {
     const subscriptionId = user.subscription.id;
   
     const generatedSignature = crypto
-      .createHmac("Sha26", process.env.RAZORPAY_SECRET)
+      .createHmac("Sha256", process.env.RAZORPAY_SECRET)
       .update(`${razorpay_payment_id} | ${subscriptionId}`)
       .digest("hex");
   
