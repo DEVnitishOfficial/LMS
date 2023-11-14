@@ -59,6 +59,11 @@ export const buySubscription = async (req, res, next) => {
   }
 };
 
+/**
+ * @VERIFY_SUBSCRIPTION
+ * @ROUTE @POST {{URL}}/api/v1/payments/verify
+ * @ACCESS Private (Logged in user only)
+ */
 export const verifySubscription = async (req, res, next) => {
   try {
     const { id } = req.user;
