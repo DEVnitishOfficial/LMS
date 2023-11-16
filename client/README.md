@@ -67,6 +67,10 @@ npx tailwindcss init -p
 npm run dev
 
 ```
+6. add the following plugins in the tailwing.config.js file
+```
+plugins: [require("daisyui"), require("@tailwindcss/line-clamp")],
+```
 ### Adding plugins and dependencies
 ```
 npm install @reduxjs/toolkit react-redux react-router-dom react-icons react-chartjs-2 chart.js daisyui axios react-hot-toast @tailwindcss/line-clamp
