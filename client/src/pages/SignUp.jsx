@@ -79,7 +79,7 @@ function SignUp() {
 
         const response = await dispatch(createAccount(formData)) 
         console.log('response',response)
-        if(response.payload.success)
+        if(response?.payload?.success)
         navigate("/")
 
         navigate("/")
