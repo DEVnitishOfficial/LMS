@@ -1,5 +1,3 @@
-import React from 'react'
-
 function CarouselSlide({image, title, description, slideNumber, totalSlide}) {
   return (
     <div id={`slide${slideNumber}`} className="carousel-item relative w-full">
