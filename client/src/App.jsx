@@ -1,6 +1,7 @@
 import { Route,Routes } from "react-router-dom"
 
 import AboutUs from "./pages/AboutUs"
+import Contact from "./pages/Course/Contact"
 import CourseList from "./pages/Course/CourseList"
 import HomePage from "./pages/HomePage"
 import LogIn from "./pages/LogIn"
@@ -16,6 +17,7 @@ function App() {
       <Route path="/about" element={<AboutUs/>}> </Route>
       <Route path="/signup" element={<SignUp/>}> </Route>
       <Route path="/login" element={<LogIn/>}> </Route>
+      <Route path="/contact" element={<Contact/>}> </Route>
 
       <Route path="/courses" element={<CourseList/>}> </Route>
 

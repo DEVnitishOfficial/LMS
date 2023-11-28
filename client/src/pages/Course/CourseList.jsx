@@ -10,10 +10,10 @@ function CourseList(){
     const dispatch = useDispatch()
 
     const {courseData} = useSelector((state) => state.course)
+    // console.log('courseData',courseData)
 
       async function loadCourses(){
        await dispatch(getAllCourses())
-
       }
     useEffect(() => {
         loadCourses()
@@ -33,8 +33,6 @@ function CourseList(){
                         return <CourseCard key={element._id} data={element} />
                     })}
                 </div>
-            
-
         </div>
        </HomeLayout>
     )

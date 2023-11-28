@@ -4,6 +4,7 @@ import { BsPersonCircle } from 'react-icons/bs'
 import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 
+import { isValidEmail, isValidPassword } from '../Helper/regexMatcher'
 import HomeLayout from '../Layout/HomeLayout'
 import { createAccount } from '../Redux/Slices/AuthSlice'
 
@@ -59,12 +60,12 @@ function SignUp() {
             return
         }
             // checking valid email
-        if(!signUpData.email.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)){
+        if(!isValidEmail(signUpData.email)){
         toast('Please entre a valid email')
         return
         }
              // checking password validation
-        if(!signUpData.password.match(/^[a-zA-Z0-9!@#$%^&*]{6,16}$/)){
+        if(!isValidPassword(signUpData.password)){
         toast('Password should be at least 6-16 character with one number and special character')
         return
         }
@@ -80,8 +81,6 @@ function SignUp() {
         const response = await dispatch(createAccount(formData)) 
         console.log('response',response)
         if(response?.payload?.success)
-        navigate("/")
-
         navigate("/")
         SetSignUpData({
             fullName : "",
@@ -116,7 +115,7 @@ function SignUp() {
             type="file" 
             name='image_uploads'
             id='image-upload'
-            accept='.jpg, .jpeg, .png, .svg, '
+            accept='.jpg, .jpeg, .png, .svg,'
             />
 
 <div className='flex flex-col gap-1'>
