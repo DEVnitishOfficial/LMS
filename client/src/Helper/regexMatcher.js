@@ -4,5 +4,5 @@ export function isValidEmail(String){
 }
 
 export function isValidPassword(String){
-    return String.match(/^[a-zA-Z0-9!@#$%^&*]{6,16}$/)
+    return String.match(/^[a-zA-Z0-9!@#$%^&*]{8,16}$/)
 }

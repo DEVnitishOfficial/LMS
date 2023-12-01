@@ -66,7 +66,7 @@ function SignUp() {
         }
              // checking password validation
         if(!isValidPassword(signUpData.password)){
-        toast('Password should be at least 6-16 character with one number and special character')
+        toast('Password should be at least 8-16 character with one number and special character')
         return
         }
 
