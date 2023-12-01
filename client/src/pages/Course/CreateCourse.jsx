@@ -51,7 +51,7 @@ function CreateCourse() {
       !userInput.description ||
       !userInput.category ||
       !userInput.thumbnail ||
-      userInput.createdBy
+      !userInput.createdBy
     ) {
       toast.error("All fields are mandatory");
       return;
