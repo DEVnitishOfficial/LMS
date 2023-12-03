@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 
-import axiosInstance from '../../Helper/axiosInstance'
+import axiosInstance from '../../Helper/axiosInstance.js'
 
 const initialState = {
   isLoggedIn: localStorage.getItem("isLoggedIn") || false,
@@ -59,7 +59,10 @@ export const logout = createAsyncThunk('/auth/logout', async () => {
 
 export const updateProfile = createAsyncThunk('/user/update/profile', async (data) => {
   try {
-    const res = axiosInstance.put(`/user/update${data[0]}`,data[1]);
+    console.log('first')
+    const res =  axiosInstance.put(`/user/update/${data[0]}`,data[1]);
+    console.log('second')
+    console.log('res',res)
     toast.promise(res, {
       loading : 'Wait! profile update is in progress',
       success : (data) => {

@@ -7,7 +7,6 @@ function UserProfile(){
 
 
        const userData = useSelector((state) => state?.auth?.data)
-       console.log('userData from userProfile',userData)
 
 
     return(

@@ -296,13 +296,18 @@ const changePassword = async (req, res, next) => {
 
 const updateUser = async(req,res,next) => {
    const {fullName} = req.body;
-   const {id} = req.user.id;
+   const {id} = req.params;
+   console.log('name',fullName,id)
 
    const user = await User.findById(id);
+  //  console.log('getting user id',user)
    if(!user){
     return next(new AppErr('user does not exist',400))
    }
-   if(req.fullName){
+  //  console.log('user',user)
+   console.log(user.fullName)
+   console.log(fullName)
+   if(fullName){
     user.fullName = fullName
    }
    if(req.file){
@@ -317,10 +322,10 @@ const updateUser = async(req,res,next) => {
         crop: "fill",
       });
 
-      console.log("Upload Result:", result);
+      // console.log("Upload Result:", result);
 
       if (result) {
-        console.log("result", result);
+        // console.log("result", result);
         user.avatar.public_id = result.public_id;
         user.avatar.secure_url = result.secure_url;
 

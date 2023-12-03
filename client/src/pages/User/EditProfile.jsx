@@ -15,7 +15,7 @@ function EditProfile(){
          previewImage : "",
          fullName : "",
          avatar : "",
-         userId : useSelector((state) => {state?.auth?.data?._id})
+         userId : useSelector((state) => state?.auth?.data?._id)
     })
     function handleImageUpload(e){
         e.preventDefault()
@@ -41,27 +41,28 @@ function EditProfile(){
         })
     }
 
-     async function onFormSubmit(e){
-        e.preventDefault()
-        console.log('formdata',data)
-        if(!data.fullName || !data.avatar){
-        toast.error("All fields are mandatory")
-        return
+    async function onFormSubmit(e) {
+        e.preventDefault();
+        console.log(data);
+        if(!data.fullName || !data.avatar) {
+            toast.error("All fields are mandatory");
+            return;
         }
-        if(data.fullName.length<5){
-            toast.error("Name must be at least 5 character")
-            return
+        if(data.fullName.length < 5) {
+            toast.error("Name cannot be of less than 5 characters");
+            return;
         }
-        const formData = new FormData()
-        formData.append("fullName",data.fullName)
-        formData.append("avatar",data.avatar)
+        const formData = new FormData();
+        formData.append("fullName", data.fullName);
+        formData.append("avatar", data.avatar);
+        console.log(formData.entries().next())
+        console.log(formData.entries().next())
+        console.log('formData',formData)
+        await dispatch(updateProfile([data.userId, formData]));
 
-        await dispatch(updateProfile([data.userId, formData]))
-        
-        await dispatch(getUserData())
+        await dispatch(getUserData());
 
-        navigate("/user/profile")
-      
+        navigate("/user/profile");
     }
 
     return (
