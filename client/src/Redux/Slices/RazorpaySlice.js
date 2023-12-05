@@ -12,9 +12,10 @@ const initialState = {
     monthelySalesRecords : []
 }
 
- const getRazorPayId = createAsyncThunk("/razorpay/getId", async () => {
+ export const getRazorPayId = createAsyncThunk("/razorpay/getId", async () => {
     try {
         const response = await axiosInstance.get("/payments/razorpay-key")
+        console.log('rezorpaykey',response.data)
         return response.data
     } catch (error) {
         toast.error("failed to load data")
@@ -24,6 +25,7 @@ const initialState = {
   export const purchaseCourseBundle = createAsyncThunk("/purchaseCourse", async () => {
     try {
         const response = await axiosInstance.post("/payments/subscribe")
+        console.log('subscription id',response.data)
         return response.data
     } catch (error) {
         toast.error(error?.response?.data?.message)
