@@ -2,6 +2,7 @@ import User from "../models/userModel.js";
 import { razorpay } from "../server.js";
 import AppErr from "../utils/errorUtils.js";
 import crypto from 'crypto'
+import Payment from "../models/paymentModel.js";
 
 export const getRazorpayApiKey = async (req, res, next) => {
   try {
@@ -23,20 +24,21 @@ export const getRazorpayApiKey = async (req, res, next) => {
 export const buySubscription = async (req, res, next) => {
   try {
     const { id } = req.user;
-    console.log('id',id)
+    // console.log('id',id)
     const user = await User.findById(id);
-    console.log('user',user)
+    // console.log('user',user)
     if (!user) {
       return next(new AppErr("User not found with provided Id", 400));
     }
     if (user.role === "ADMIN") {
       return next(new AppErr("admin can not purchase subscription", 400));
     }
-  
-    const subscription = razorpay.subscriptions.create({
+  console.log('see subs is running or not')
+    const subscription = await razorpay.subscriptions.create({
       plan_id : process.env.RAZORPAY_PLAN_ID,
       customer_notify: 1
     });
+    console.log('subscription',subscription.status)
 
     if (!subscription) {
       console.error('Error creating subscription:', subscription);
@@ -55,7 +57,7 @@ export const buySubscription = async (req, res, next) => {
       subscription_id: subscription.id,
     });
   } catch (error) {
-    return next(new AppErr(error.message,'400'))
+    return next(new AppErr(error.message,400))
   }
 };
 
