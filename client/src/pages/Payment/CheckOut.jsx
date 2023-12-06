@@ -14,7 +14,7 @@ function CheckOut(){
     const razorPayKey = useSelector((state) => state?.razorPay?.key)
     const subscription_id = useSelector((state) => state?.razorPay?.subscription_id)
     const userData = useSelector((state) => state?.auth?.data)
-    const isPaymentVerified = useSelector((state) => state?.razorPay?.isPaymentVerified)
+    // const isPaymentVerified = useSelector((state) => state?.razorPay?.isPaymentVerified)
     const paymentDetails = {
         razorpay_payment_id : " ",
         razorpay_subscription_id : " ",
@@ -45,12 +45,12 @@ function CheckOut(){
                 paymentDetails.razorpay_signature = response.razorpay_signature
 
                 toast.success("payment successfull")
-                await dispatch(verifyUserPayment(paymentDetails))
-                isPaymentVerified ? navigate("/checkout/success") : navigate("/checkout/fail")
+                const res = await dispatch(verifyUserPayment(paymentDetails))
+                res?.payload?.success ? navigate("/checkout/success") : navigate("/checkout/fail")
             }
         }
-        const paymentObject = new window.Razorpay(options)
-        paymentObject.open()
+        const paymentObject = new window.Razorpay(options);
+        paymentObject.open();
     }
 
    async function load(){

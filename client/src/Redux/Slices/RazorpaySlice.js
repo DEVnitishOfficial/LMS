@@ -15,7 +15,6 @@ const initialState = {
  export const getRazorPayId = createAsyncThunk("/razorpay/getId", async () => {
     try {
         const response = await axiosInstance.get("/payments/razorpay-key")
-        console.log('rezorpaykey',response.data)
         return response.data
     } catch (error) {
         toast.error("failed to load data")
@@ -25,7 +24,6 @@ const initialState = {
   export const purchaseCourseBundle = createAsyncThunk("/purchaseCourse", async () => {
     try {
         const response = await axiosInstance.post("/payments/subscribe")
-        console.log('subscription id',response.data)
         return response.data
     } catch (error) {
         toast.error(error?.response?.data?.message)
@@ -33,6 +31,7 @@ const initialState = {
  })
 
  export const verifyUserPayment = createAsyncThunk("/payments/verify", async (data) => {
+    console.log('verifyUserPayment',data)
     try {
         const response = await axiosInstance.post("/payments/verify",{
             razorpay_payment_id : data.razorpay_payment_id,
@@ -47,7 +46,7 @@ const initialState = {
 
  export const getPaymentRecord = createAsyncThunk("/payments/record", async () => {
     try {
-        const response = axiosInstance.get("/payments?count=10",
+        const response = axiosInstance.get("/payments?count=12",
         toast.promise(response,{
             loading : "Payment data is loading",
             success : (data) => {
@@ -90,10 +89,12 @@ const razorpaySlice = createSlice({
             state.subscription_id = action?.payload?.subscription_id
         })
         .addCase(verifyUserPayment.fulfilled,(state,action) => {
+            console.log('success action',action)
             toast.success(action?.payload?.message)
             state.isPaymentVerified = action?.payload?.success;
         })
         .addCase(verifyUserPayment.rejected,(state,action) => {
+            console.log('reject action',action)
             toast.success(action?.payload?.message)
             state.isPaymentVerified = action?.payload?.success;
         })
