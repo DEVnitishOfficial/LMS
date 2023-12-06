@@ -24,9 +24,7 @@ export const getRazorpayApiKey = async (req, res, next) => {
 export const buySubscription = async (req, res, next) => {
   try {
     const { id } = req.user;
-    // console.log('id',id)
     const user = await User.findById(id);
-    // console.log('user',user)
     if (!user) {
       return next(new AppErr("User not found with provided Id", 400));
     }
@@ -36,7 +34,8 @@ export const buySubscription = async (req, res, next) => {
   console.log('see subs is running or not')
     const subscription = await razorpay.subscriptions.create({
       plan_id : process.env.RAZORPAY_PLAN_ID,
-      customer_notify: 1
+      customer_notify: 1,
+      total_count: 12,
     });
     console.log('subscription',subscription.status)
 
