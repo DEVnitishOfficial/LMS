@@ -31,7 +31,6 @@ export const buySubscription = async (req, res, next) => {
     if (user.role === "ADMIN") {
       return next(new AppErr("admin can not purchase subscription", 400));
     }
-  console.log('see subs is running or not')
     const subscription = await razorpay.subscriptions.create({
       plan_id : process.env.RAZORPAY_PLAN_ID,
       customer_notify: 1,
@@ -47,7 +46,7 @@ export const buySubscription = async (req, res, next) => {
     user.subscription.id = subscription.id;
     user.subscription.status = subscription.status;
 
-  
+  console.log('userdbsave',user)
     await user.save();
   
     res.status(200).json({
@@ -75,12 +74,19 @@ export const verifySubscription = async (req, res, next) => {
       return next(new AppErr("User not found with provided Id", 400));
     }
     const subscriptionId = user.subscription.id;
+    console.log('subscriptionId',subscriptionId)
   
+    // Generating a signature with SHA256 for verification purposes
+  // Here the subscriptionId should be the one which we saved in the DB
+  // razorpay_payment_id is from the frontend and there should be a '|' character between this and subscriptionId
+  // At the end convert it to Hex value
     const generatedSignature = crypto
-      .createHmac("Sha256", process.env.RAZORPAY_SECRET)
-      .update(`${razorpay_payment_id} | ${subscriptionId}`)
+      .createHmac("sha256", process.env.RAZORPAY_SECRET)
+      .update(`${razorpay_payment_id}|${subscriptionId}`)
       .digest("hex");
   
+      console.log('generated signature',generatedSignature)
+      console.log('razorpay signature',razorpay_signature)
     if (generatedSignature !== razorpay_signature) {
       return next(new AppErr("payment not verified,Please try again", 500));
     }
