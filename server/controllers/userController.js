@@ -47,8 +47,6 @@ const register = async (req, res, next) => {
     return next(new AppErr("User Registrantion failed, please try agian", 400));
   }
 
-  console.log("files details > ", JSON.stringify(req.file));
-
   if (req.file) {
     try {
       const result = await cloudinary.v2.uploader.upload(req.file.path, {
@@ -59,10 +57,7 @@ const register = async (req, res, next) => {
         crop: "fill",
       });
 
-      console.log("Upload Result:", result);
-
       if (result) {
-        console.log("result", result);
         user.avatar.public_id = result.public_id;
         user.avatar.secure_url = result.secure_url;
 
@@ -158,7 +153,6 @@ const logOut = (req, res) => {
  * @returns User Object
  ******************************************************/
 const getProfile = async(req, res, next) => {
-  console.log('request',req.user)
   try {
     const userId = req.user.id;
     const user = await User.findById(userId);
@@ -201,7 +195,6 @@ const forgotPassword = async (req, res, next) => {
   const message = `You can reset your password using <a href= ${forgotPasswordUrl} target="_blank"> Reset your password</a>.\n if the above link doesn't work then copy paste this link ${forgotPasswordUrl} into the new tab.\n if you have not requested this please Ignore it.`;
   try {
     await sendEmail(email, subject, message);
-    console.log("emailMessageToken", forgotPasswordUrl);
     res.status(200).json({
       success: true,
       message: `Forgot password token has been sent to the ${email} successfully`,
@@ -222,7 +215,6 @@ const forgotPassword = async (req, res, next) => {
  ******************************************************/
 const resetPassword = async (req, res, next) => {
   const { resetToken } = req.params;
-  console.log("resetToken", resetToken);
   const { password } = req.body; // your new password
 
   if (!resetToken) {
@@ -297,16 +289,11 @@ const changePassword = async (req, res, next) => {
 const updateUser = async(req,res,next) => {
    const {fullName} = req.body;
    const {id} = req.params;
-   console.log('name',fullName,id)
 
    const user = await User.findById(id);
-  //  console.log('getting user id',user)
    if(!user){
     return next(new AppErr('user does not exist',400))
    }
-  //  console.log('user',user)
-   console.log(user.fullName)
-   console.log(fullName)
    if(fullName){
     user.fullName = fullName
    }
@@ -322,10 +309,8 @@ const updateUser = async(req,res,next) => {
         crop: "fill",
       });
 
-      // console.log("Upload Result:", result);
 
       if (result) {
-        // console.log("result", result);
         user.avatar.public_id = result.public_id;
         user.avatar.secure_url = result.secure_url;
 

@@ -36,7 +36,6 @@ export const buySubscription = async (req, res, next) => {
       customer_notify: 1,
       total_count: 12,
     });
-    console.log('subscription',subscription.status)
 
     if (!subscription) {
       console.error('Error creating subscription:', subscription);
@@ -46,7 +45,6 @@ export const buySubscription = async (req, res, next) => {
     user.subscription.id = subscription.id;
     user.subscription.status = subscription.status;
 
-  console.log('userdbsave',user)
     await user.save();
   
     res.status(200).json({
@@ -74,7 +72,6 @@ export const verifySubscription = async (req, res, next) => {
       return next(new AppErr("User not found with provided Id", 400));
     }
     const subscriptionId = user.subscription.id;
-    console.log('subscriptionId',subscriptionId)
   
     // Generating a signature with SHA256 for verification purposes
   // Here the subscriptionId should be the one which we saved in the DB
@@ -84,9 +81,6 @@ export const verifySubscription = async (req, res, next) => {
       .createHmac("sha256", process.env.RAZORPAY_SECRET)
       .update(`${razorpay_payment_id}|${subscriptionId}`)
       .digest("hex");
-  
-      console.log('generated signature',generatedSignature)
-      console.log('razorpay signature',razorpay_signature)
     if (generatedSignature !== razorpay_signature) {
       return next(new AppErr("payment not verified,Please try again", 500));
     }
@@ -110,7 +104,9 @@ export const verifySubscription = async (req, res, next) => {
 export const cancelSubscription = async (req, res, next) => {
  try {
      const { id } = req.user;
+     console.log('cancelsubs',id)
      const user = await User.findById(id);
+     console.log('cancelsubs_user',user)
      if (!user) {
        return next(
          new AppErr(
@@ -123,10 +119,12 @@ export const cancelSubscription = async (req, res, next) => {
        return next(new AppErr("admin cannot cance any subscription", 500));
      }
      const subscriptionId = user.subscription.id;
+     console.log('subscription id',subscriptionId)
      const cancelSubscription = await razorpay.subscriptions.cancel(
        subscriptionId
      );
      user.subscription.status = cancelSubscription.status;
+     console.log('saving to db user',user)
      await user.save();
  } catch (error) {
     return next(new AppErr(error.message,'400'))

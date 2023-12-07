@@ -1,3 +1,4 @@
+import User from "../models/userModel.js";
 import AppErr from "../utils/errorUtils.js";
 import jwt from 'jsonwebtoken'
 
@@ -21,9 +22,8 @@ const authorizedRoles = (...roles) =>  async(req,res,next) => { // creating clou
 
 }
 const authorizedSubscriber = async(req,res,next) => {
-    const subscription = req.user.subscription
-    const currentUserRole = req.user.role
-    if(currentUserRole !== 'ADMIN' && subscription.status !== 'active'){
+    const user = await User.findById(req.user.id)
+    if(user.role !== 'ADMIN' && user.subscription.status !== 'active'){
         return next (new AppErr('please subscribe to access this route',403))
     }
     next()
