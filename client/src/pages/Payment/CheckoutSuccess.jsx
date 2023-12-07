@@ -1,9 +1,17 @@
+import { useEffect } from "react";
 import { AiFillCheckCircle } from "react-icons/ai";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
 import HomeLayout from "../../Layout/HomeLayout";
+import { getUserData } from "../../Redux/Slices/AuthSlice";
 
 function CheckoutSuccess(){
+
+    const dispatch = useDispatch()
+    useEffect(() => {
+       dispatch(getUserData())
+    },[])
 
     return(
         <HomeLayout>

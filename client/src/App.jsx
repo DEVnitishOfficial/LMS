@@ -11,6 +11,7 @@ import HomePage from "./pages/HomePage"
 import LogIn from "./pages/LogIn"
 import NotFound from "./pages/NotFound"
 import CheckOut from "./pages/Payment/CheckOut"
+import CheckoutFailure from "./pages/Payment/CheckoutFailure"
 import CheckoutSuccess from "./pages/Payment/CheckoutSuccess"
 import SignUp from "./pages/SignUp"
 import EditProfile from "./pages/User/EditProfile"
@@ -39,6 +40,7 @@ function App() {
       <Route path="/user/editProfile" element={<EditProfile />} />
       <Route path="/checkout" element={<CheckOut />}/>
       <Route path="/checkout/success" element={<CheckoutSuccess/>}/>
+      <Route path="/checkout/fail" element={<CheckoutFailure/>}/>
       </Route>
 
       <Route path="/courses" element={<CourseList/>}> </Route>
