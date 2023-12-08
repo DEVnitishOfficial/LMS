@@ -104,9 +104,7 @@ export const verifySubscription = async (req, res, next) => {
 export const cancelSubscription = async (req, res, next) => {
  try {
      const { id } = req.user;
-     console.log('cancelsubs',id)
      const user = await User.findById(id);
-     console.log('cancelsubs_user',user)
      if (!user) {
        return next(
          new AppErr(
@@ -119,13 +117,16 @@ export const cancelSubscription = async (req, res, next) => {
        return next(new AppErr("admin cannot cance any subscription", 500));
      }
      const subscriptionId = user.subscription.id;
-     console.log('subscription id',subscriptionId)
      const cancelSubscription = await razorpay.subscriptions.cancel(
        subscriptionId
      );
      user.subscription.status = cancelSubscription.status;
-     console.log('saving to db user',user)
      await user.save();
+     
+     res.status(200).json({
+      success: true,
+      message: 'Subscription canceled successfully',
+    });
  } catch (error) {
     return next(new AppErr(error.message,'400'))
  }
