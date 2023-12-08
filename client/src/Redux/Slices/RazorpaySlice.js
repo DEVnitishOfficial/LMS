@@ -61,12 +61,10 @@ const initialState = {
 
  export const cancelCourseSubscription = createAsyncThunk("/payments/cancel", async () => {
     try {
-        const response = await axiosInstance.post("/payments/unsubscribe")
-        console.log('unsubscribeRes',response)
+        const response = axiosInstance.post("/payments/unsubscribe")
         toast.promise(response,{
             loading : "Wait your unsubscription is in progress",
             success : (data) => {
-                console.log('data',data)
                 data?.data?.message
             },
             error : "failed to unsubscribe"

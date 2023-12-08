@@ -4,13 +4,14 @@ import { Link, useNavigate } from "react-router-dom"
 
 import HomeLayout from "../../Layout/HomeLayout"
 import { getUserData } from "../../Redux/Slices/AuthSlice"
-import { cancelCourseSubscription } from "../../Redux/Slices/RazorpaySlice.js"
+import { cancelCourseSubscription } from "../../Redux/Slices/RazorpaySlice"
 
 function UserProfile(){
 
        const dispatch = useDispatch()
        const navigate = useNavigate()
        const userData = useSelector((state) => state?.auth?.data)
+       
          async function handleCancelSubscription(){
             toast("Initiated cancel subscription")
            await dispatch(cancelCourseSubscription())
