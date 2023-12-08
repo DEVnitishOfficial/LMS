@@ -59,7 +59,7 @@ const initialState = {
     }
  })
 
- export const cancelCourseSubscription = createAsyncThunk("/payments/unsubscribe", async () => {
+ export const cancelCourseSubscription = createAsyncThunk("/payments/cancel", async () => {
     try {
         const response = await axiosInstance.post("/payments/unsubscribe")
         console.log('unsubscribeRes',response)
