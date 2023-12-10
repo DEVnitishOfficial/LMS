@@ -36,7 +36,7 @@ function UserProfile(){
                         <p>Role : </p>
                          <p>{userData.role}</p>
                         <p>Subscription : </p>
-                        <p>{userData?.subscription?.status === 'ACTIVE' ? 'active' : 'Inactive'}</p>
+                        <p>{userData?.subscription?.status === 'active' ? 'active' : 'Inactive'}</p>
                        
                     </div>
                     <div className="flex items-center justify-between gap-2">
