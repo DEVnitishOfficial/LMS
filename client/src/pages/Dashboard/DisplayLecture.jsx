@@ -65,7 +65,7 @@ function DisplayLecture() {
             <li className="font-semibold text-xl text-yellow-500 flex items-center justify-between">
                 <p>Lecture List</p>
                 {role === 'ADMIN' && (
-                    <button onClick={() => navigate("/course/addlecture",{state:{...state}})} className="btn-primary px-2 py-1 rounded-md font-semibold text-sm">
+                    <button onClick={() => navigate("/course/addlecture",{state:{...state}})} className=" bg-green-500 px-2 py-1 rounded-md font-semibold text-xl">
                         Add new lectures
                     </button>
                 )}
@@ -81,7 +81,7 @@ function DisplayLecture() {
                                 {lecture?.title}
                             </p>
                 {role === 'ADMIN' && (
-                    <button onClick={() => onLectureDelete(state?._id, lecture?._id)} className="btn-accent px-2 py-1 rounded-md font-semibold text-sm">
+                    <button onClick={() => onLectureDelete(state?._id, lecture?._id)} className="bg-red-500 px-2 py-1 rounded-md font-semibold text-sm">
                         Delete Lecture
                     </button>
                 )}

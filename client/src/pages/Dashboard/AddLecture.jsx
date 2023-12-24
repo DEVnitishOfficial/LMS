@@ -15,7 +15,7 @@ function AddLecture(){
   const navigate = useNavigate()
 
   const [userInput, setUserInput] = useState({
-    // id : courseDetails._id,
+    id : courseDetails._id,
     lecture : undefined,
     title : "",
     description : "",
@@ -50,7 +50,7 @@ function AddLecture(){
      const response = await dispatch(addCourseLecture(userInput));
      if(response?.payload?.success){
         setUserInput({
-            // id : courseDetails._id,
+            id : courseDetails._id,
             lecture : undefined,
             title : "",
             description : "",
@@ -60,7 +60,7 @@ function AddLecture(){
   }
 
   useEffect(() => {
-    // if(!courseDetails) navigate("/course")
+    if(!courseDetails) navigate("/course")
   },[])
 
 
