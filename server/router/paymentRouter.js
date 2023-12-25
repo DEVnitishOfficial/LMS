@@ -22,7 +22,7 @@ router
  .post( isLoggedIn,authorizedSubscriber, cancelSubscription)
 
 router 
-   .get('/')
+   .route('/')
    .get(isLoggedIn, authorizedRoles('ADMIN'), allPayments)
 
    export default router
