@@ -8,7 +8,7 @@ const initialState = {
     subscribedCount : 0
 }
 
-export const getStatsData = createAsyncThunk("stats/get", async () => {
+export const getStatsData = createAsyncThunk("/stats/get", async () => {
     try {
         const response = axiosInstance.get("/admin/stats/users")
         toast.promise(response,{
@@ -25,13 +25,14 @@ export const getStatsData = createAsyncThunk("stats/get", async () => {
 })
 
 const statSlice = createSlice({
-    name : "state",
+    name : "stats",
     initialState,
     reducers:{},
     extraReducers: (builder) => {
-        builder.addCase(getStatsData.fulfilled), (state, action) => {
-            console.log(action)
-        }
+        builder.addCase(getStatsData.fulfilled, (state, action) => {
+            state.allUserCount = action?.payload?.allUsersCount
+            state.subscribedCount = action?.payload?.subscribedUsersCount
+        })
     }
 })
 
