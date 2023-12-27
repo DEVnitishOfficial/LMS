@@ -15,7 +15,6 @@ function DisplayLecture() {
   const [currentVideo, setCurrentVideo] = useState(0);
 
   async function onLectureDelete(courseId, lectureId){
-    console.log(courseId,lectureId)
     await dispatch(deleteCourseLecture({courseId: courseId, lectureId: lectureId}))
     await dispatch(getCourseLecture(courseId));
     

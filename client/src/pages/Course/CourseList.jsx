@@ -10,7 +10,7 @@ function CourseList(){
     const dispatch = useDispatch()
 
     const {courseData} = useSelector((state) => state.course)
-    // console.log('courseData',courseData)
+    console.log('courseData',courseData)
 
       async function loadCourses(){
        await dispatch(getAllCourses())

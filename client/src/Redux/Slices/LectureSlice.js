@@ -60,11 +60,9 @@ export const getCourseLecture = createAsyncThunk("/course/lecture/get",async(cou
     extraReducers:(builder) => {
         builder
         .addCase(getCourseLecture.fulfilled,(state,action) => {
-            console.log('getCourseLecture',action)
            state.lectures = action?.payload?.lectures;
         })
         .addCase(addCourseLecture.fulfilled,(state,action) => {
-            console.log('addCourseLecture',action)
             state.lectures = action?.payload?.course?.lectures
         })
     }
