@@ -43,7 +43,7 @@ export const logIn = createAsyncThunk('/auth/login', async (data) => {
 
 export const logout = createAsyncThunk('/auth/logout', async () => {
   try {
-    const res = axiosInstance.post("/user/logout");
+    const res = axiosInstance.get("/user/logout");
     toast.promise(res, {
       loading : 'Wait! Logout is in progress',
       success : (data) => {
@@ -59,10 +59,7 @@ export const logout = createAsyncThunk('/auth/logout', async () => {
 
 export const updateProfile = createAsyncThunk('/user/update/profile', async (data) => {
   try {
-    console.log('first')
     const res =  axiosInstance.put(`/user/update/${data[0]}`,data[1]);
-    console.log('second')
-    console.log('res',res)
     toast.promise(res, {
       loading : 'Wait! profile update is in progress',
       success : (data) => {
