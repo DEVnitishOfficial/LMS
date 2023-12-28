@@ -31,6 +31,11 @@ function DisplayLecture() {
         <div className="text-2xl text-center font-semibold text-yellow-500">
           Course Name : {state.title}
         </div>
+        {role === 'ADMIN' && (
+                    <button onClick={() => navigate("/course/addlecture",{state:{...state}})} className=" bg-green-500 px-2 py-1 rounded-md font-semibold text-xl">
+                        Add new lectures
+                    </button>
+                )}
           
         {lectures && lectures.length>0 &&<div className="flex justify-center gap-10 w-full">
             {/* Left section for playing videos and displaying course details to admin */}
